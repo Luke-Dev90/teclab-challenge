@@ -38,7 +38,7 @@ public class CareerController {
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updatedCareer(@PathVariable Long id,@Valid @RequestBody CareerDTO careerDTO)
             throws Exception {
         careerService.updateCareer(id,careerDTO);

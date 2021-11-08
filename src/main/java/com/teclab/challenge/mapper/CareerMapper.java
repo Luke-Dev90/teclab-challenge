@@ -9,7 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CareerMapper {
     Career careerToDto(CareerDTO careerDTO);
     CareerDTO DTOtoCareer(Career career);

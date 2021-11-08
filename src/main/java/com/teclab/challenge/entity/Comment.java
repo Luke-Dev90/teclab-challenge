@@ -1,23 +1,33 @@
 package com.teclab.challenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment {
+@Table(name = "comment")
+public class Comment{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String comment;
+
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name="pupil_id")
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Pupil pupil;
+
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name="career_id")
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Career career;
 }

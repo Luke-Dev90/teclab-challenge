@@ -5,6 +5,7 @@ import com.teclab.challenge.entity.Career;
 import com.teclab.challenge.mapper.CareerMapper;
 import com.teclab.challenge.repository.CareerRepository;
 import com.teclab.challenge.service.CareerService;
+import com.teclab.challenge.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class CareerServiceImpl implements CareerService {
 
     @Autowired
     private CareerRepository careerRepository;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private CareerMapper careerMapper;
@@ -34,18 +38,16 @@ public class CareerServiceImpl implements CareerService {
     }
 
     @Override
-    public void updateCareer(Long id, CareerDTO careerDTO)throws Exception  {
-        Career career = careerRepository.findById(id).map(
-                c -> {
-                    careerMapper.updateFromDTO(careerDTO,c);
-                    return careerMapper.careerToDto(careerDTO);
-                }
-        ).orElseThrow( () -> new NoSuchElementException("Not found career"));
+    public Career updateCareer(Long id, CareerDTO careerDTO)throws Exception  {
+        Career career = careerRepository.findById(id).orElseThrow
+                ( () -> new NoSuchElementException("Not found career"));
+        careerMapper.updateFromDTO(careerDTO,career);
+        return careerRepository.save(career);
     }
 
     @Override
-    public void saveCareer(CareerDTO career) {
-        careerRepository.save( careerMapper.careerToDto(career));
+    public Career saveCareer(CareerDTO career) {
+        return careerRepository.save( careerMapper.careerToDto(career));
     }
 
     @Override
@@ -53,6 +55,7 @@ public class CareerServiceImpl implements CareerService {
         Career careerOptional = careerRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("Career not found")
         );
+        commentService.deleteCommentByCareerId(id);
         careerRepository.deleteById(id);
     }
 }

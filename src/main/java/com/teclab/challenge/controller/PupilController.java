@@ -31,10 +31,19 @@ public class PupilController {
 
     @PostMapping
     public ResponseEntity<?> savePupil(@Valid @RequestBody PupilDTO pupilDTO){
+        pupilService.savePupil(pupilDTO);
         response.clear();
         response.put("message","Pupil created successfully");
         response.put("timestamp",LocalDate.now());
         return new ResponseEntity<>(response,HttpStatus.CREATED);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updatePupil(@PathVariable Long id,@Valid @RequestBody PupilDTO pupilDTO) throws Exception {
+        pupilService.updatePupil(id,pupilDTO);
+        response.clear();
+        response.put("message","Pupil updated successfully");
+        response.put("timestamp",LocalDate.now());
+        return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
@@ -50,6 +59,13 @@ public class PupilController {
     public ResponseEntity<?> getById(@PathVariable Long id){
         response.clear();
         response.put("pupil",pupilService.getPupil(id));
+        response.put("timestamp",LocalDate.now());
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> getByName(@PathVariable String name){
+        response.clear();
+        response.put("pupil",pupilService.getPupilByName(name));
         response.put("timestamp",LocalDate.now());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

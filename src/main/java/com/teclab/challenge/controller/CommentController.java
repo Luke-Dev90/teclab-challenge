@@ -1,6 +1,7 @@
 package com.teclab.challenge.controller;
 
 import com.teclab.challenge.dto.CommentDTO;
+import com.teclab.challenge.entity.Comment;
 import com.teclab.challenge.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,14 +25,16 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<?> getAllComments(){
+        List<Comment> listComments = commentService.getAllComments();
         response.clear();
-        response.put("comments",commentService.getAllComments());
+        response.put("comments",listComments);
         response.put("timestamp", LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> saveComment(@Valid @RequestBody CommentDTO commentDTO){
+        commentService.saveComment(commentDTO);
         response.clear();
         response.put("comment",commentDTO);
         response.put("timestamp",LocalDate.now());
@@ -47,6 +51,7 @@ public class CommentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
+        commentService.deleteCommentById(id);
         response.clear();
         response.put("message","Comment deleted");
         response.put("timestamp",LocalDate.now());
@@ -54,7 +59,8 @@ public class CommentController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable Long id,@Valid @RequestBody CommentDTO commentDTO){
+    public ResponseEntity<?> updateComment(@PathVariable Long id,@Valid @RequestBody CommentDTO commentDTO) throws Exception {
+        commentService.updateComment(id,commentDTO);
         response.clear();
         response.put("message","Comment updated");
         response.put("timestamp",LocalDate.now());

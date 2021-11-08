@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PupilRepository extends JpaRepository<Pupil,Long> {
-    @Query(value = "SELECT * FROM Pupil AS p where name =?1",nativeQuery = true)
-    PupilDTO getByName(String name);
+    @Query(value = "SELECT * FROM Pupil AS p where p.name =?1", nativeQuery = true)
+    Pupil getByName(String name);
 }

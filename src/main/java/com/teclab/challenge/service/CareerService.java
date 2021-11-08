@@ -8,7 +8,7 @@ import java.util.List;
 public interface CareerService {
     List<CareerDTO> getAllCareer();
     CareerDTO getCareerById(Long id) throws Exception;
-    void updateCareer(Long id, CareerDTO careerDTO) throws Exception ;
-    void saveCareer(CareerDTO career);
+    Career updateCareer(Long id, CareerDTO careerDTO) throws Exception ;
+    Career saveCareer(CareerDTO career);
     void deleteCareerById(Long id);
 }
