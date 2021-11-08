@@ -34,6 +34,16 @@ public class CareerServiceImpl implements CareerService {
     }
 
     @Override
+    public void updateCareer(Long id, CareerDTO careerDTO)throws Exception  {
+        Career career = careerRepository.findById(id).map(
+                c -> {
+                    careerMapper.updateFromDTO(careerDTO,c);
+                    return careerMapper.careerToDto(careerDTO);
+                }
+        ).orElseThrow( () -> new NoSuchElementException("Not found career"));
+    }
+
+    @Override
     public void saveCareer(CareerDTO career) {
         careerRepository.save( careerMapper.careerToDto(career));
     }
