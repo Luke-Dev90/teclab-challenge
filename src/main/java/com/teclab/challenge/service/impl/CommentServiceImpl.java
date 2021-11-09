@@ -4,9 +4,14 @@ import com.teclab.challenge.dto.CareerDTO;
 import com.teclab.challenge.dto.CommentDTO;
 import com.teclab.challenge.entity.Career;
 import com.teclab.challenge.entity.Comment;
+import com.teclab.challenge.entity.Pupil;
 import com.teclab.challenge.mapper.CommentMapper;
+import com.teclab.challenge.repository.CareerRepository;
 import com.teclab.challenge.repository.CommentsRepository;
+import com.teclab.challenge.repository.PupilRepository;
+import com.teclab.challenge.service.CareerService;
 import com.teclab.challenge.service.CommentService;
+import com.teclab.challenge.service.PupilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +24,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentsRepository commentsRepository;
+
+    @Autowired
+    private PupilRepository pupilRepository;
+
+    @Autowired
+    private CareerRepository careerRepository;
 
     @Autowired
     private CommentMapper commentMapper;
@@ -55,7 +66,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void saveComment(CommentDTO comment) {
-        commentsRepository.save( commentMapper.commentToDTO(comment));
+        Comment comment1 = commentMapper.commentToDTO(comment);
+        Pupil pupilFind = pupilRepository.findById(comment.getPupilId()).orElseThrow(
+                ()->new NoSuchElementException("Pupil not found")
+        );
+        Career career = careerRepository.findById(comment.getCareerId()).orElseThrow(
+                ()-> new NoSuchElementException("Career not found")
+        );
+        comment1.setCareer(career);
+        comment1.setPupil(pupilFind);
+        commentsRepository.save(comment1);
     }
 
     @Override
