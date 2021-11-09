@@ -43,7 +43,7 @@ public class CommentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCommentById(@PathVariable Long id){
-        response.clear();;
+        response.clear();
         response.put("comment",commentService.getCommentById(id));
         response.put("timestamp",LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.OK);
